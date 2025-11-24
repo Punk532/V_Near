@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>S_Near</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: #1a0026;
+      font-family: monospace;
+      color: white;
+    }
+
+    /* Corações caindo */
+    .coracao {
+      position: absolute;
+      top: -50px;
+      color: #b300ff;
+      font-size: 24px;
+      animation: cair linear infinite;
+    }
+
+    @keyframes cair {
+      to { transform: translateY(110vh); opacity: 0; }
+    }
+
+    /* Tela de senha */
+    #senhaBox {
+      display: none;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 28px;
+      color: #d27dff;
+      text-align: center;
+    }
+
+    #senhaInput {
+      margin-top: 20px;
+      padding: 10px;
+      font-size: 20px;
+      background: #250038;
+      border: 2px solid #b300ff;
+      color: white;
+      border-radius: 10px;
+      outline: none;
+      text-align: center;
+    }
+
+    /* Mensagem digitando */
+    #mensagemFinal {
+      display: none;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 90%;
+      max-width: 600px;
+      font-size: 26px;
+      color: #e2b3ff;
+      line-height: 1.4;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Música após senha correta -->
+<audio id="musica" src="musica.mp3"></audio>
+
+<div id="senhaBox">
+  <div id="digitandoSenha"></div>
+  <input type="text" id="senhaInput" placeholder="Digite a senha...">
+</div>
+
+<div id="mensagemFinal"></div>
+
+<script>
+  // Criar chuva de corações
+  function criarCoracao() {
+    const cor = document.createElement('div');
+    cor.classList.add('coracao');
+    cor.innerText = '💜';
+    cor.style.left = Math.random() * 100 + 'vw';
+    cor.style.animationDuration = (2 + Math.random() * 3) + 's';
+    document.body.appendChild(cor);
+    setTimeout(() => cor.remove(), 5000);
+  }
+
+  setInterval(criarCoracao, 150);
+
+  // Após 5 segundos mostrar a tela de senha
+  setTimeout(() => {
+    escreverSenha();
+  }, 5000);
+
+  // Efeito digitando "Senha:"
+  function escreverSenha() {
+    const box = document.getElementById('senhaBox');
+    const digit = document.getElementById('digitandoSenha');
+    box.style.display = 'block';
+
+    const texto = 'Senha:';
+    let i = 0;
+
+    const intervalo = setInterval(() => {
+      digit.innerText = texto.slice(0, i);
+      i++;
+      if (i > texto.length) clearInterval(intervalo);
+    }, 150);
+  }
+
+  // Validar senha
+  const input = document.getElementById('senhaInput');
+  input.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+      if (input.value.trim().toLowerCase() === 'eu te amo') {
+        iniciarMensagem();
+      } else {
+        alert('Senha incorreta 🖤');
+      }
+    }
+  });
+
+  // Efeito digitando mensagem final
+  function iniciarMensagem() {
+    document.getElementById('senhaBox').style.display = 'none';
+    const msgBox = document.getElementById('mensagemFinal');
+    msgBox.style.display = 'block';
+
+    const musica = document.getElementById('musica');
+    musica.play();
+
+    const texto = `Sasa…
+
+Você me enlouquece de um jeito que eu nem tento esconder mais.
+Seu jeito, sua voz, seu olhar… tudo em você me puxa, me prende, me desmonta.
+
+E o mais louco é que não é só desejo, é querer estar com você a cada segundo.
+É querer te fazer feliz.
+Eu te provo isso todos os dias.
+
+Eu te amo, minha neném.
+Do jeito mais verdadeiro que existe.`;
+
+    let i = 0;
+    const intervalo = setInterval(() => {
+      msgBox.innerText = texto.slice(0, i);
+      i++;
+      if (i > texto.length) clearInterval(intervalo);
+    }, 60);
+  }
+</script>
+
+</body>
+</html>
+
